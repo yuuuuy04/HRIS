@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>添加员工</title>
+
+  <style>
+    #app {
+      display: flex;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      background-color: #f0f0f0;
+      padding: 10px;
+    }
+
+    .sidebar button {
+      margin-bottom: 10px;
+    }
+
+    .content {
+      margin-left: 20px; /* Add margin to separate sidebar and content */
+    }
+
+    /* Add other styles as needed */
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <!-- 左侧导航栏 -->
+  <div class="sidebar">
+    <button onclick="chdep()">查看部门</button>
+    <button onclick="chemp()">查看员工</button>
+    <button onclick="chpro()">查看项目</button>
+    <button onclick="deldep()">删除部门</button>
+    <button onclick="delemp()">删除员工</button>
+    <button onclick="delpro()">删除项目</button>
+    <button onclick="adddep()">添加部门</button>
+    <button>添加员工</button>
+    <button onclick="addpro()">添加项目</button>
+  </div>
+  <!-- 右侧表格 -->
+  <div>
+    <form @submit.prevent="submitForm">
+      <label for="number">员工号:</label>
+      <input type="text" id="number" v-model="formData.number" required><br><br>
+
+      <label for="name">名字:</label>
+      <input type="text" id="name" v-model="formData.name" required><br><br>
+
+      <label for="phnum">电话:</label>
+      <input type="text" id="phnum" v-model="formData.phnum" required><br><br>
+
+      <label for="sta">在职状态:</label>
+      <select id="sta" v-model="formData.sta" required>
+        <option value="在职">在职</option>
+        <option value="休息">休息</option>
+      </select><br><br>
+
+      <label for="depno">所在部门:</label>
+      <select id="depno" v-model="formData.depno" required>
+        <option v-for="dep in deps" :key="deps.depno" :value="dep.depno">{{dep.depname}}:{{dep.depno}}</option>
+      </select><br><br>
+
+
+      <button type="submit" style="width: 200px; height: 50px; font-size: 30px">提交</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      currentView: 'departments',
+      formData: {
+        number: '',
+        depno: '',
+        sta: '',
+        name: '',
+        phnum: ''
+      },
+      deps: []
+    },
+    created() {
+      // 在组件创建时发送请求获取学生数据
+      this.fetchDepData();
+    },
+    methods: {
+        submitForm() {
+          // 使用 Axios 发送 POST 请求
+          axios.post('http://localhost:8081/addemp', this.formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data; boundary=---011000010111000001101001'
+            }
+          }).then(response => {
+            this.formData = {
+              number: '',
+              depno: '',
+              sta: '',
+              name: '',
+              phnum: ''
+            }
+            console.log(response.data);
+          }).catch(error => {
+            console.error('Axios error:', error);
+          });
+        },
+      async fetchDepData() {
+        try {
+          // 发送 GET 请求到后端获取学生数据
+          const response = await axios.get('http://localhost:8081/chdep');
+
+          // 将获取的数据保存到 Vue 对象中
+          this.deps = response.data;
+        } catch (error) {
+          console.error('Error fetching deps data:', error.message);
+          // 处理错误，可以根据需要进行错误提示或其他操
+        }
+      }
+    },
+    mounted() {
+      this.loadDataFromServer(this.currentView);
+    }
+  });
+  function chdep(){
+    window.location.replace("http://localhost:8081/chdeppage")
+  }
+  function chemp(){
+    window.location.replace("http://localhost:8081/chemppage")
+  }
+  function chpro(){
+    window.location.replace("http://localhost:8081/chpropage")
+  }
+  function deldep(){
+    window.location.replace("http://localhost:8081/deldeppage")
+  }
+  function delemp(){
+    window.location.replace("http://localhost:8081/delemppage")
+  }
+  function delpro(){
+    window.location.replace("http://localhost:8081/delpropage")
+  }
+  function adddep(){
+    window.location.replace("http://localhost:8081/adddeppage")
+  }
+  function addpro(){
+    window.location.replace("http://localhost:8081/addpropage")
+  }
+</script>
+
+</body>
+</html>

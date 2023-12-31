@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎使用人力资源管理系统</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 50px;
+      }
+
+      #welcome-text {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      #enter-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #enter-button:hover {
+        background-color: #45a049;
+      }
+    </style>
+</head>
+<body>
+<div id="welcome-container">
+  <h1 id="welcome-text">欢迎使用人力资源管理系统！</h1>
+  <button id="enter-button" onclick="enterSystem()">进入系统</button>
+</div>
+
+<script>
+  function enterSystem() {
+    window.location.replace("http://localhost:8081/chdeppage")
+    // 在这里可以添加进入系统的逻辑，例如跳转到系统页面或执行其他操作
+  }
+</script>
+</body>
+</html>
